@@ -1,0 +1,247 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+     <!--Import Google Icon Font-->
+      <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!--Import materialize.css-->
+      <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+       <!--Import jQuery before materialize.js-->
+	   <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+      <script type="text/javascript" src="js/materialize.min.js"></script>
+	<title>地方美食地圖</title>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 2%;
+      }
+      #map {
+        height: 100%;
+      }
+#floating-panel {
+  position: absolute;
+  top: 200px;
+  left: 25%;
+  z-index: 5;
+  background-color: #fff;
+  padding: 5px;
+  border: 1px solid #999;
+  text-align: center;
+  font-family: 'Roboto','sans-serif';
+  line-height: 30px;
+  padding-left: 10px;
+}
+    </style>
+
+	 
+  
+    <script>
+	
+
+var food=	[
+{'place':'Gontran Cherrier Bakery','lat':25.041163, 'lng':121.556388},
+{'place':'極鮮饌複合式創意料理','lat':25.041763,'lng':121.553755},
+{'place':'兩餐 韓國年糕火鍋吃到飽','lat':25.044603,'lng':121.506612},
+{'place':'Bobii Frutii珍珠水果特調','lat':25.042645,'lng':121.550140},
+{'place':'品川蘭 牛肉麵','lat':25.040747,'lng':121.553433},
+{'place':'布咕咖啡BooGoo Cafe','lat':25.053823,'lng':121.547080},
+{'place':'黑森林','lat':24.12316,'lng':120.6744},
+{'place':'人文大樓','lat':24.12341,'lng':120.6727},
+{'place':'萬年樓','lat':24.1228,'lng':120.6728},
+{'place':'樸軒','lat':24.12359,'lng':120.6808},
+{'place':'勤軒','lat':24.1233,'lng':120.68},
+{'place':'華軒','lat':24.1232,'lng':120.68},
+{'place':'怡軒','lat':24.12296,'lng':120.6807},
+{'place':'教職員宿舍','lat':24.12264,'lng':120.6795},
+{'place':'學人宿舍','lat':24.12263,'lng':120.6806},
+{'place':'應經二館','lat':24.12266,'lng':120.6786},
+{'place':'生物科技學研究所','lat':24.12239,'lng':120.6786},
+{'place':'食品暨生物科技大樓','lat':24.12201,'lng':120.6785},
+{'place':'食品暨生技實習工廠','lat':24.12164,'lng':120.6785},
+{'place':'實習商店','lat':24.12297,'lng':120.679},
+{'place':'理工大樓','lat':24.12268,'lng':120.6769},
+{'place':'森林館','lat':24.12215,'lng':120.6774},
+{'place':'水保館','lat':24.12187,'lng':120.6773},
+{'place':'水保二館','lat':24.12161,'lng':120.6773},
+{'place':'電機大樓','lat':24.12249,'lng':120.6762},
+{'place':'化材大樓','lat':24.12244,'lng':120.6754},
+{'place':'應用科技大樓','lat':24.12164,'lng':120.6764},
+{'place':'生命科學大樓','lat':24.12186,'lng':120.6756},
+{'place':'行政大樓','lat':24.12225,'lng':120.6743},
+{'place':'綜合教學大樓','lat':24.12177,'lng':120.6727},
+{'place':'紅土網球場','lat':24.12124,'lng':120.679},
+{'place':'應經一館','lat':24.12125,'lng':120.6785},
+{'place':'土木環工大樓','lat':24.12058,'lng':120.6785},
+{'place':'生機大樓','lat':24.11987,'lng':120.6784},
+{'place':'混凝土科技中心','lat':24.11944,'lng':120.6787},
+{'place':'資訊科學大樓','lat':24.12112,'lng':120.6771},
+{'place':'理學大樓','lat':24.12085,'lng':120.6776},
+{'place':'遺傳中心','lat':24.12051,'lng':120.6776},
+{'place':'化學館','lat':24.12057,'lng':120.677},
+{'place':'機械館','lat':24.12004,'lng':120.6773},
+{'place':'機械實習工廠','lat':24.11939,'lng':120.6772},
+{'place':'創新育成中心','lat':24.11947,'lng':120.6777},
+{'place':'機械二館','lat':24.11941,'lng':120.6783},
+{'place':'精密所','lat':24.12125,'lng':120.6763},
+{'place':'作物科學大樓','lat':24.1206,'lng':120.6765},
+{'place':'農環科學大樓','lat':24.12116,'lng':120.6755},
+{'place':'溫室區','lat':24.11997,'lng':120.6761},
+{'place':'園藝展示示範園區','lat':24.1205,'lng':120.6755},
+{'place':'中興湖','lat':24.1209,'lng':120.6743},
+{'place':'圖書館','lat':24.11988,'lng':120.6743},
+{'place':'社管大樓','lat':24.12069,'lng':120.6733},
+{'place':'雲平樓','lat':24.11958,'lng':120.6725},
+{'place':'動物科學系館','lat':24.11861,'lng':120.6785},
+{'place':'獸醫館','lat':24.11815,'lng':120.6784},
+{'place':'動物疾病診斷中心','lat':24.11815,'lng':120.6782},
+{'place':'農藝系實驗地','lat':24.11865,'lng':120.6776},
+{'place':'動物試驗中心','lat':24.11873,'lng':120.6768},
+{'place':'大動物學生實習場','lat':24.11816,'lng':120.6774},
+{'place':'作物實習館','lat':24.11886,'lng':120.6764},
+{'place':'室內游泳池','lat':24.11838,'lng':120.6764},
+{'place':'體育館','lat':24.11851,'lng':120.6758},
+{'place':'網球場','lat':24.11855,'lng':120.6753},
+{'place':'籃球場','lat':24.11861,'lng':120.6745},
+{'place':'排球場','lat':24.11788,'lng':120.6745},
+{'place':'田徑場','lat':24.11804,'lng':120.6734},
+{'place':'學生宿舍傳達室','lat':24.11887,'lng':120.6725},
+{'place':'仁齋','lat':24.11877,'lng':120.6721},
+{'place':'義齋','lat':24.11836,'lng':120.6722},
+{'place':'禮齋','lat':24.11798,'lng':120.6721},
+{'place':'智齋','lat':24.11764,'lng':120.6722},
+{'place':'信齋','lat':24.11724,'lng':120.6723},
+{'place':'動植物防疫檢疫大樓','lat':24.12244,'lng':120.679},
+{'place':'國際農業研究中心','lat':24.12292,'lng':120.6786},
+				
+			];
+var taiwan = {lat:0, lng:0};
+var pos  = {lat:0, lng:0};
+var map;
+var markers = [];
+function initMap() {
+	taiwan.lat = food[1].lat;
+	taiwan.lng = food[1].lng;
+  myMap = new google.maps.Map(document.getElementById('map'), {
+    zoom: 10,
+    center: taiwan,
+  });
+	addView(taiwan);
+  
+  var infoWindow = new google.maps.InfoWindow({map: myMap});
+  // Try HTML5 geolocation.
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      pos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+      infoWindow.setPosition(pos);
+      infoWindow.setContent('you are here!');
+    }, function() {
+      handleLocationError(true, infoWindow, map.getCenter());
+    });
+  } else {
+    // Browser doesn't support Geolocation
+    handleLocationError(false, infoWindow, map.getCenter());
+  }
+  	
+}
+function add(x){
+deleteMarkers();
+taiwan.lat = food[x].lat;
+taiwan.lng = food[x].lng;
+	addMarker(taiwan);
+
+}
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+  infoWindow.setPosition(pos);
+  infoWindow.setContent(browserHasGeolocation ?
+                        'Error: The Geolocation service failed.' :
+                        'Error: Your browser doesn\'t support geolocation.');
+}
+
+  
+// Adds a marker to the map and push to the array.
+function addMarker(location) {
+  var marker = new google.maps.Marker({
+    position: location,
+    map: myMap,
+	title: '中興大學'
+  });
+   markers.push(marker);
+  
+}
+// Sets the map on all markers in the array.
+function setMapOnAll(map) {
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(map);
+  }
+}
+// Removes the markers from the map, but keeps them in the array.
+function clearMarkers() {
+  setMapOnAll(null);
+}
+// Shows any markers currently in the array.
+function showMarkers() {
+  setMapOnAll(map);
+}
+// Deletes all markers in the array by removing references to them.
+function deleteMarkers() {
+  clearMarkers();
+  markers = [];
+}
+function listing(){
+  for(i=0;i<6;i++){
+	var str = "";
+	<!-- str += "<a class='dropdown-button btn' href='#' data-activates='dropdown"+i+"'>Data"+i+"</a>" -->
+	<!-- str += "<ul id='dropdown"+i+"' class='dropdown-content'>" -->
+	for(j=0;j<6;j++)
+		str += '<li><a href="javascript:add('+(j+10*i)+')">'+food[(j+10*i)].place+'</a></li>'
+	<!-- str += "</ul>" -->
+	document.getElementById("dropdown"+i).innerHTML = str;
+	}
+}
+    </script>
+	 <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHMCooQbCZ0IndAireAlJaSXy5Si8uoqc&callback=initMap"></script>
+	  </head>
+  <body onload="listing()">
+  
+  <div class="container">
+        <span style="font-family:Microsoft JhengHei;">
+     <div class="card-panel">
+  
+     <span class="blue-text text-darken-2">
+     <strong> <H3 align="center">地方美食地圖</H3></strong></span>
+	 </div>
+	 </div>
+	 
+	  <a href="期末作業.html" align="center">回首頁<p></a>
+	 
+	<div id="floating-panel">
+		<a class='dropdown-button btn' href='#' data-activates='dropdown0'>台北市</a>
+		<ul id='dropdown0' class='dropdown-content'>
+		</ul>
+		<a class='dropdown-button btn' href='#' data-activates='dropdown1'>新北市</a>
+		<ul id='dropdown1' class='dropdown-content'>
+		</ul>
+		<a class='dropdown-button btn' href='#' data-activates='dropdown2'>台中市</a>
+		<ul id='dropdown2' class='dropdown-content'>
+		</ul>
+		<a class='dropdown-button btn' href='#' data-activates='dropdown3'>新竹市</a>
+		<ul id='dropdown3' class='dropdown-content'>
+		</ul>
+		<a class='dropdown-button btn' href='#' data-activates='dropdown4'>台南市</a>
+		<ul id='dropdown4' class='dropdown-content'>
+		</ul>
+		<a class='dropdown-button btn' href='#' data-activates='dropdown5'>澎湖縣</a>
+		<ul id='dropdown5' class='dropdown-content'>
+		</ul>
+    </div>
+    <div id="map"></div>
+   <div id="pano"></div>
+ 
+  </body>
+</html>
